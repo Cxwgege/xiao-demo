@@ -6,7 +6,6 @@ const componentMap = {
   'system/role/index': () => import('@/views/system/role/index.vue'),
   'system/menu/index': () => import('@/views/system/menu/index.vue'),
   'home/index': () => import('@/views/home/index.vue'),
-  'house/index': () => import('@/views/house/index.vue')
 }
 
 export function generateRoutes(menus) {
