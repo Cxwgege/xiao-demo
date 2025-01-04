@@ -1,5 +1,6 @@
 package com.xiao.domain.vo;
 
+import com.xiao.domain.entity.Menu;
 import lombok.Data;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class LoginVO {
         private String nickname;
         private String avatar;
         private List<String> roles;
-        private List<String> permissions;
+        private List<String> perms;
+        private List<Menu> menus;
     }
 } 

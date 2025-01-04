@@ -1,7 +1,7 @@
 package com.xiao.config;
 
 import cn.dev33.satoken.stp.StpInterface;
-import com.xiao.service.PermissionService;
+import com.xiao.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,12 +11,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StpInterfaceImpl implements StpInterface {
     
-    private final PermissionService permissionService;
+    private final MenuService permissionService;
 
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         // 返回此 loginId 拥有的权限列表
-        return permissionService.getUserPermissions(Long.valueOf(loginId.toString()));
+        return permissionService.getUserMenus(Long.valueOf(loginId.toString()));
     }
 
     @Override

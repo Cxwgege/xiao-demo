@@ -6,11 +6,13 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xiao.common.BusinessException;
 import com.xiao.domain.dto.LoginDTO;
+import com.xiao.domain.entity.Menu;
 import com.xiao.domain.entity.User;
 import com.xiao.domain.vo.LoginVO;
 import com.xiao.mapper.UserMapper;
+import com.xiao.mapper.MenuMapper;
 import com.xiao.service.AuthService;
-import com.xiao.service.PermissionService;
+import com.xiao.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,8 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService {
     
     private final UserMapper userMapper;
-    private final PermissionService permissionService;
+    private final MenuService permissionService;
+    private final MenuMapper menuMapper;
     
     @Override
     public LoginVO login(LoginDTO loginDTO) {
@@ -57,7 +60,10 @@ public class AuthServiceImpl implements AuthService {
         
         // 获取权限信息
         List<String> roles = StpUtil.getRoleList();
-        List<String> permissions = StpUtil.getPermissionList();
+        List<String> perms = StpUtil.getPermissionList();
+        
+        // 获取用户菜单
+        List<Menu> menus = menuMapper.selectMenusByUserId(user.getId());
         
         // 构建登录响应
         LoginVO loginVO = new LoginVO();
@@ -67,7 +73,8 @@ public class AuthServiceImpl implements AuthService {
         BeanUtil.copyProperties(user, userInfo);
         userInfo.setUserId(user.getId());
         userInfo.setRoles(roles);
-        userInfo.setPermissions(permissions);
+        userInfo.setPerms(perms);
+        userInfo.setMenus(menus);
         
         loginVO.setUserInfo(userInfo);
         return loginVO;
