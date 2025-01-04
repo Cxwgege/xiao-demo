@@ -1,0 +1,65 @@
+server:
+  port: 13556
+
+spring:
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xiao_demo?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    
+  # Redis配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 123456
+      database: 1
+      timeout: 10s
+      lettuce:
+        pool:
+          min-idle: 0
+          max-idle: 8
+          max-active: 8
+          max-wait: -1ms
+
+# MyBatis Plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      # 逻辑删除配置
+      logic-delete-field: isDeleted # 逻辑删除字段名
+      logic-delete-value: 1 # 逻辑已删除值
+      logic-not-delete-value: 0 # 逻辑未删除值
+  configuration:
+    # 驼峰命名转换
+    map-underscore-to-camel-case: true
+    # 打印SQL日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # mapper.xml文件位置,如果你有mapper.xml文件，需要在这里配置
+  mapper-locations: classpath:mapper/*.xml
+
+# Sa-Token配置
+sa-token:
+  # token名称
+  token-name: Xiao-Token
+  # token有效期
+  timeout: 2592000
+  # token临时有效期
+  active-timeout: -1
+  # 是否允许同一账号并发登录
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+  # 是否从Cookie中读取Token，设置为false
+  is-read-cookie: false
+  # 是否从Header中读取Token，设置为true
+  is-read-header: true
+  # jwt密钥
+  jwt-secret-key: 4ThZZfDmT93QDLeoUeanjAfZR12345678
+  max-try-times: -1
