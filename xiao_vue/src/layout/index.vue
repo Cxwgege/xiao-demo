@@ -20,11 +20,17 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside width="220px">
+        <el-aside :width="isCollapse ? '64px' : '220px'">
+          <div class="menu-fold" @click="isCollapse = !isCollapse">
+            <el-icon class="fold-icon">
+              <component :is="isCollapse ? 'Expand' : 'Fold'" />
+            </el-icon>
+          </div>
           <el-menu
             :default-active="route.path"
             class="el-menu-vertical"
             :router="true"
+            :collapse="isCollapse"
             background-color="#f8fafc"
             text-color="#475569"
             active-text-color="#409EFF"
@@ -58,16 +64,36 @@
             </template>
           </el-menu>
         </el-aside>
-        <el-main>
-          <router-view />
-        </el-main>
+        <el-container class="right-container">
+          <div class="nav-bar">
+            <el-tabs
+              v-model="activeTab"
+              class="nav-tabs"
+              @tab-remove="removeTab"
+              @tab-click="handleClick"
+              type="card"
+            >
+              <el-tab-pane
+                v-for="item in visitedViews"
+                :key="item.path"
+                :label="item.title"
+                :name="item.path"
+                :closable="item.path !== '/home'"
+              >
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+          <el-main>
+            <router-view />
+          </el-main>
+        </el-container>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { House } from '@element-plus/icons-vue'
@@ -76,6 +102,9 @@ import { ElMessage } from 'element-plus'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+
+// 添加折叠状态控制
+const isCollapse = ref(false)
 
 // 将扁平的菜单数据转换为树形结构
 const menuTree = computed(() => {
@@ -107,12 +136,61 @@ const handleCommand = (command) => {
     router.push('/login')
   }
 }
+
+// 添加tabs相关的响应式数据
+const activeTab = ref('/home')
+const visitedViews = ref([
+  { path: '/home', title: '首页' }
+])
+
+// 监听路由变化，动态添加标签页
+watch(() => route.path, (newPath) => {
+  const currentRoute = router.currentRoute.value
+  const title = currentRoute.meta?.title
+  
+  if (title && newPath !== '/home') {
+    const isExist = visitedViews.value.some(view => view.path === newPath)
+    if (!isExist) {
+      visitedViews.value.push({
+        path: newPath,
+        title: title
+      })
+    }
+    activeTab.value = newPath
+  }
+}, { immediate: true })
+
+// 处理标签页点击
+const handleClick = (tab) => {
+  router.push(tab.props.name)
+}
+
+// 处理标签页关闭
+const removeTab = (targetPath) => {
+  const tabs = visitedViews.value
+  let activePath = activeTab.value
+  
+  if (activePath === targetPath) {
+    tabs.forEach((tab, index) => {
+      if (tab.path === targetPath) {
+        const nextTab = tabs[index + 1] || tabs[index - 1]
+        if (nextTab) {
+          activePath = nextTab.path
+        }
+      }
+    })
+  }
+  
+  activeTab.value = activePath
+  visitedViews.value = tabs.filter(tab => tab.path !== targetPath)
+  router.push(activePath)
+}
 </script>
 
 <style scoped>
 .common-layout {
   min-height: 100vh;
-  background-color: #f0f2f5;
+  background-color: #fff;
 }
 
 .el-header {
@@ -159,10 +237,11 @@ const handleCommand = (command) => {
   background-color: #f8fafc;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   border-right: 1px solid #e2e8f0;
+  transition: width 0.3s;
 }
 
 .el-menu-vertical {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 84px);
   border-right: none;
 }
 
@@ -194,8 +273,10 @@ const handleCommand = (command) => {
 }
 
 .el-main {
-  padding: 20px;
-  background-color: #f0f2f5;
+  padding: 16px;
+  height: calc(100vh - 116px); /* 减去header高度(60px)和tabs高度(40px)以及padding(16px) */
+  overflow-y: auto;
+  background-color: #fff;
 }
 
 :deep(.el-card) {
@@ -242,5 +323,249 @@ const handleCommand = (command) => {
 .el-menu-vertical :deep(.el-menu-item:hover .el-icon),
 .el-menu-vertical :deep(.el-sub-menu__title:hover .el-icon) {
   color: #1e293b;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.fold-icon {
+  font-size: 14px;
+  color: #475569;
+  pointer-events: none;
+}
+
+.el-menu-vertical:not(.el-menu--collapse) {
+  width: 220px;
+}
+
+.tabs-container {
+  padding: 6px 6px 0;
+  background: white;
+  border-bottom: 1px solid #e4e7ed;
+}
+
+.nav-tabs {
+  :deep(.el-tabs__header) {
+    margin: 0;
+  }
+
+  :deep(.el-tabs__nav) {
+    border: none;
+  }
+
+  :deep(.el-tabs__item) {
+    height: 36px;
+    line-height: 36px;
+    border: none;
+    color: #666;
+    transition: all 0.3s;
+    
+    &.is-active {
+      color: #409EFF;
+      background-color: #ecf5ff;
+      border-radius: 4px 4px 0 0;
+    }
+    
+    &:hover {
+      color: #409EFF;
+    }
+  }
+}
+
+.main-container {
+  background-color: #f6f8fa;
+}
+
+.nav-bar {
+  background-color: #fff;
+  padding: 0;
+  border-bottom: 1px solid #dcdfe6;
+  margin: 0;
+  height: 40px;
+  line-height: 40px;
+}
+
+.nav-tabs {
+  :deep(.el-tabs__header) {
+    margin: 0;
+    border: none;
+    height: 40px;
+  }
+
+  :deep(.el-tabs__nav-wrap) {
+    padding: 0;
+    &::after {
+      display: none;
+    }
+  }
+
+  :deep(.el-tabs__nav) {
+    border: none;
+    height: 40px;
+  }
+
+  :deep(.el-tabs__item) {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border: none !important;
+    background: #f6f8fa !important;
+    margin: 0 2px;
+    padding: 0 16px;
+    transition: all 0.3s;
+    position: relative;
+    top: 0;
+    
+    &.is-active {
+      background: linear-gradient(135deg, #00d2ff 0%, #928dab 100%) !important;
+      color: #fff;
+      
+      .el-icon-close {
+        color: #fff;
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+          color: #fff;
+        }
+      }
+    }
+    
+    &:not(.is-active):hover {
+      background: #edf2f7 !important;
+      color: #00d2ff;
+    }
+
+    .el-icon-close {
+      margin-left: 6px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      
+      &:hover {
+        background-color: #ff4d4f;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.el-main {
+  padding: 16px;
+  height: calc(100vh - 100px); /* 减去header高度(60px)和tabs高度(40px) */
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.nav-bar {
+  background-color: #fff;
+  padding: 0;
+  border-bottom: 1px solid #dcdfe6;
+  height: 40px;
+  line-height: 40px;
+}
+
+.nav-tabs {
+  :deep(.el-tabs__header) {
+    margin: 0;
+    border: none;
+    height: 40px;
+  }
+
+  :deep(.el-tabs__nav-wrap) {
+    padding: 0;
+    &::after {
+      display: none;
+    }
+  }
+
+  :deep(.el-tabs__nav) {
+    border: none;
+    height: 40px;
+  }
+
+  :deep(.el-tabs__item) {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border: none !important;
+    background: #f6f8fa !important;
+    margin: 0 2px;
+    padding: 0 16px;
+    transition: all 0.3s;
+    position: relative;
+    top: 0;
+    
+    &.is-active {
+      background: linear-gradient(135deg, #00d2ff 0%, #928dab 100%) !important;
+      color: #fff;
+      
+      .el-icon-close {
+        color: #fff;
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+          color: #fff;
+        }
+      }
+    }
+    
+    &:not(.is-active):hover {
+      background: #edf2f7 !important;
+      color: #00d2ff;
+    }
+
+    .el-icon-close {
+      margin-left: 6px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      
+      &:hover {
+        background-color: #ff4d4f;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.el-main {
+  padding: 16px;
+  height: calc(100vh - 100px); /* 减去header高度(60px)和tabs高度(40px) */
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+.menu-fold {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  &:hover {
+    background-color: #edf2f7;
+  }
+}
+
+.fold-icon {
+  font-size: 14px;
+  color: #475569;
+  pointer-events: none; /* 禁用鼠标事件 */
+}
+
+/* 覆盖 el-icon 的默认样式 */
+:deep(.el-icon) {
+  pointer-events: none;  /* 禁用所有图标的鼠标事件 */
 }
 </style> 
