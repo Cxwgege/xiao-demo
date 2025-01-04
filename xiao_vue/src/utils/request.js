@@ -12,7 +12,7 @@ service.interceptors.request.use(
   config => {
     const userStore = useUserStore()
     if (userStore.token) {
-      config.headers['Authorization'] = userStore.token
+      config.headers['Xiao-Token'] = userStore.token
     }
     return config
   },
@@ -26,13 +26,13 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      ElMessage.error(res.msg || '系统错误')
-      return Promise.reject(new Error(res.msg || '系统错误'))
+      ElMessage.error(res.message || '系统错误')
+      return Promise.reject(new Error(res.message || '系统错误'))
     }
     return res
   },
   error => {
-    ElMessage.error(error.message)
+    ElMessage.error(error.response?.data?.message || error.message || '系统错误')
     return Promise.reject(error)
   }
 )
