@@ -273,9 +273,9 @@ const removeTab = (targetPath) => {
 }
 
 .el-main {
-  padding: 16px;
-  height: calc(100vh - 116px); /* 减去header高度(60px)和tabs高度(40px)以及padding(16px) */
-  overflow-y: auto;
+  padding: 0;
+  height: calc(100vh - 100px); /* 减去header和tabs的高度 */
+  overflow: hidden; /* 防止出现滚动条 */
   background-color: #fff;
 }
 

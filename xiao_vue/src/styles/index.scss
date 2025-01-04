@@ -1,0 +1,40 @@
+/* 全局滚动条样式 */
+::-webkit-scrollbar {
+  width: 0;  /* 移除垂直滚动条 */
+  height: 0; /* 移除水平滚动条 */
+}
+
+/* 如果某些特定组件需要显示滚动条，可以单独设置 */
+.show-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #dcdfe6;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f5f7fa;
+  }
+}
+
+/* 设置全局容器溢出处理 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 内容区域的滚动控制 */
+.el-main {
+  overflow: hidden !important;
+} 
