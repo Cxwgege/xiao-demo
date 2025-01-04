@@ -85,17 +85,19 @@ const loginRules = reactive({
 const handleLogin = async (formEl) => {
   if (!formEl) return
   
-  await formEl.validate(async (valid, fields) => {
+  await formEl.validate(async (valid) => {
     if (valid) {
       loading.value = true
       try {
         const { data } = await authApi.login(loginForm)
         userStore.setToken(data.token)
-        userStore.setUserInfo(data.userInfo)
-        ElMessage.success('登录成功')
+        userStore.setUserInfo(data)
+        console.log('登录成功，用户信息：', data)
         router.push('/')
+        ElMessage.success('登录成功')
       } catch (error) {
-        console.error('登录失败:', error)
+        console.error('登录失败：', error)
+        ElMessage.error(error.message || '登录失败')
       } finally {
         loading.value = false
       }
