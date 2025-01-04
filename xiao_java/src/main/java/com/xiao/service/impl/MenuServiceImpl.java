@@ -42,7 +42,7 @@ public class MenuServiceImpl implements MenuService {
         );
         
         return roles.stream()
-            .map(Role::getRoleCode)
+            .map(Role::getCode)
             .collect(Collectors.toList());
     }
 

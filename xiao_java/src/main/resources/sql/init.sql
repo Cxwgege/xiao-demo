@@ -19,15 +19,15 @@ CREATE TABLE `user` (
 -- 角色表
 CREATE TABLE `role` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `role_name` varchar(50) NOT NULL COMMENT '角色名称',
-  `role_code` varchar(50) NOT NULL COMMENT '角色编码',
+  `name` varchar(50) NOT NULL COMMENT '角色名称',
+  `code` varchar(50) NOT NULL COMMENT '角色编码',
   `description` varchar(255) DEFAULT NULL COMMENT '角色描述',
   `status` tinyint DEFAULT '1' COMMENT '状态(0:禁用,1:正常)',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint DEFAULT '0' COMMENT '是否删除(0:未删除,1:已删除)',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_role_code` (`role_code`)
+  UNIQUE KEY `uk_code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
 -- 用户角色关联表

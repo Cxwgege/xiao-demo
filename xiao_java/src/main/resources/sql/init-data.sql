@@ -3,7 +3,7 @@ INSERT INTO `user` (`username`, `password`, `nickname`, `email`, `phone`, `avata
 VALUES ('admin', '$2a$10$vg5QNHhCknAqb1yZoB.PrOYkxdHxnZ4C5HwT.PGLVUjCLVEq8vUbe', '管理员', 'admin@xiao.com', '13800138000', 'https://avatars.githubusercontent.com/u/1?v=4', 1);
 
 -- 初始化角色数据
-INSERT INTO `role` (`role_name`, `role_code`, `description`, `status`) VALUES
+INSERT INTO `role` (`name`, `code`, `description`, `status`) VALUES
 ('超级管理员', 'SUPER_ADMIN', '超级管理员，拥有所有权限', 1),
 ('普通用户', 'USER', '普通用户，拥有基本权限', 1);
 

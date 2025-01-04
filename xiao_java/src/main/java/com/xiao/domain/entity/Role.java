@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 public class Role {
     @TableId(type = IdType.AUTO)
     private Long id;
-    private String roleName;
-    private String roleCode;
+    private String name;
+    private String code;
     private String description;
     private Integer status;
     
