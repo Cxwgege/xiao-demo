@@ -350,27 +350,36 @@ const removeTab = (targetPath) => {
 .nav-tabs {
   :deep(.el-tabs__header) {
     margin: 0;
+    border: none;
+    height: 40px;
+  }
+
+  :deep(.el-tabs__nav-wrap) {
+    padding: 0;
+    &::after {
+      display: none;
+    }
   }
 
   :deep(.el-tabs__nav) {
     border: none;
+    height: 40px;
   }
 
   :deep(.el-tabs__item) {
-    height: 36px;
-    line-height: 36px;
-    border: none;
-    color: #666;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border: none !important;
+    background: #f6f8fa !important;
+    margin: 0 2px;
+    padding: 0 16px;
     transition: all 0.3s;
+    position: relative;
+    top: 0;
     
-    &.is-active {
-      color: #409EFF;
-      background-color: #ecf5ff;
-      border-radius: 4px 4px 0 0;
-    }
-    
-    &:hover {
-      color: #409EFF;
+    .close-icon {
+      pointer-events: auto !important;
     }
   }
 }
@@ -419,34 +428,8 @@ const removeTab = (targetPath) => {
     position: relative;
     top: 0;
     
-    &.is-active {
-      background: linear-gradient(135deg, #00d2ff 0%, #928dab 100%) !important;
-      color: #fff;
-      
-      .el-icon-close {
-        color: #fff;
-        
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.2);
-          color: #fff;
-        }
-      }
-    }
-    
-    &:not(.is-active):hover {
-      background: #edf2f7 !important;
-      color: #00d2ff;
-    }
-
-    .el-icon-close {
-      margin-left: 6px;
-      border-radius: 50%;
-      transition: all 0.3s;
-      
-      &:hover {
-        background-color: #ff4d4f;
-        color: #fff;
-      }
+    .close-icon {
+      pointer-events: auto !important;
     }
   }
 }
@@ -503,34 +486,8 @@ const removeTab = (targetPath) => {
     position: relative;
     top: 0;
     
-    &.is-active {
-      background: linear-gradient(135deg, #00d2ff 0%, #928dab 100%) !important;
-      color: #fff;
-      
-      .el-icon-close {
-        color: #fff;
-        
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.2);
-          color: #fff;
-        }
-      }
-    }
-    
-    &:not(.is-active):hover {
-      background: #edf2f7 !important;
-      color: #00d2ff;
-    }
-
-    .el-icon-close {
-      margin-left: 6px;
-      border-radius: 50%;
-      transition: all 0.3s;
-      
-      &:hover {
-        background-color: #ff4d4f;
-        color: #fff;
-      }
+    .close-icon {
+      pointer-events: auto !important;
     }
   }
 }
@@ -566,6 +523,18 @@ const removeTab = (targetPath) => {
 
 /* 覆盖 el-icon 的默认样式 */
 :deep(.el-icon) {
-  pointer-events: none;  /* 禁用所有图标的鼠标事件 */
+  pointer-events: auto !important;
+}
+
+:deep(.el-tabs__item) .el-icon-close {
+  pointer-events: auto !important;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s;
+  
+  &:hover {
+    background-color: #ff4d4f;
+    color: #fff;
+  }
 }
 </style> 
