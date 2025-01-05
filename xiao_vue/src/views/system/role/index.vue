@@ -62,7 +62,7 @@
                   v-model="row.status"
                   :active-value="1"
                   :inactive-value="0"
-                  class="status-switch"
+                  style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
                   @change="handleStatusChange(row)"
                 />
                 <el-button type="primary" link @click="handleEdit(row)">
@@ -79,7 +79,7 @@
         <!-- 分页区域 -->
         <div class="pagination-wrapper">
           <el-pagination
-            small
+              size="small"
             v-model:current-page="queryParams.current"
             v-model:page-size="queryParams.size"
             :total="total"
@@ -182,12 +182,12 @@ const handleDelete = (row) => {
 
 // 编辑角色
 const handleEdit = (row) => {
-  roleFormRef.value?.open(row)
+  roleFormRef.value?.openDialog(row)
 }
 
 // 新增角色
 const handleAdd = () => {
-  roleFormRef.value?.open()
+  roleFormRef.value?.openDialog()
 }
 
 // 添加状态变更处理函数
@@ -212,7 +212,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style  lang="scss" scoped>
 .role-container {
   height: 100%;
   padding: 20px;
@@ -225,6 +225,9 @@ onMounted(() => {
 
 .search-card {
   margin-bottom: 0;
+  :deep(.el-card__body) {
+    padding: 16px 20px;
+  }
 }
 
 .search-form {
@@ -351,25 +354,7 @@ onMounted(() => {
   color: #ff4d4f;
 }
 
-.status-switch {
-  margin: 0;
 
-  :deep(.el-switch__core) {
-    background: #ff4d4f;
-
-    &:hover {
-      background: #ff7875;
-    }
-  }
-
-  :deep(.el-switch.is-checked .el-switch__core) {
-    background: #00d2ff;
-
-    &:hover {
-      background: #33deff;
-    }
-  }
-}
 
 /* 修改表格操作列按钮样式 */
 :deep(.el-table) {
