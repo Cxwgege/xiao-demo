@@ -187,11 +187,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return new ArrayList<>();
         }
         
-        // 查询角色信息
+        // 查询角色信息，只返回状态正常的角色
         List<Long> roleIds = userRoles.stream()
                 .map(UserRole::getRoleId)
                 .collect(Collectors.toList());
                 
-        return roleMapper.selectBatchIds(roleIds);
+        LambdaQueryWrapper<Role> roleWrapper = new LambdaQueryWrapper<>();
+        roleWrapper.in(Role::getId, roleIds)
+                  .eq(Role::getStatus, 1); // 只查询状态正常的角色
+                
+        return roleMapper.selectList(roleWrapper);
     }
 } 

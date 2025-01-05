@@ -1,5 +1,6 @@
 package com.xiao.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.BeanUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,13 +44,21 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
+    @Transactional
     public void updateRole(RoleDTO roleDTO) {
         // 检查角色编码是否存在
         checkRoleCode(roleDTO.getCode(), roleDTO.getId());
         
-        Role role = new Role();
-        BeanUtils.copyProperties(roleDTO, role);
+        Role role = BeanUtil.copyProperties(roleDTO, Role.class);
         updateById(role);
+        
+        // 如果角色被禁用，删除相关的用户-角色关联
+        if (role.getStatus() == 0) {
+            LambdaQueryWrapper<UserRole> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(UserRole::getRoleId, role.getId());
+            userRoleMapper.delete(wrapper);
+        }
+        // 如果角色被启用，可以在这里处理（通常不需要自动恢复关联）
     }
 
     @Override

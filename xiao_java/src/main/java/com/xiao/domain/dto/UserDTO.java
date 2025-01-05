@@ -16,7 +16,8 @@ public class UserDTO {
     private String username;
     
     private String password;
-    
+
+    @NotBlank(message = "昵称不能为空")
     private String nickname;
     
     @Email(message = "邮箱格式不正确")

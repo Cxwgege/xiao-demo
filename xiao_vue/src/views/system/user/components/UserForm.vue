@@ -53,7 +53,18 @@
             :key="role.id"
             :label="role.name"
             :value="role.id"
-          />
+            :disabled="role.status === 0"
+          >
+            <span :style="{ color: role.status === 0 ? '#999' : 'inherit' }">{{ role.name }}</span>
+            <el-tag
+              v-if="role.status === 0"
+              size="small"
+              type="danger"
+              style="margin-left: 8px"
+            >
+              已禁用
+            </el-tag>
+          </el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -122,8 +133,19 @@ const rules = {
 // 获取角色选项
 const getRoleOptions = async () => {
   try {
-    const { data } = await getRolePage({ current: 1, size: 100 })
+    const { data } = await getRolePage({
+      current: 1,
+      size: 100  // 设置一个较大的数值以获取所有角色
+    })
     roleOptions.value = data.records
+    
+    // 如果是编辑模式，需要过滤掉已禁用的角色ID
+    if (form.id && form.roleIds) {
+      form.roleIds = form.roleIds.filter(roleId => {
+        const role = roleOptions.value.find(r => r.id === roleId)
+        return role && role.status === 1
+      })
+    }
   } catch (error) {
     console.error('获取角色列表失败：', error)
   }
@@ -281,6 +303,12 @@ defineExpose({
       &:focus {
         box-shadow: 0 0 0 1px #00d2ff inset !important;
       }
+    }
+  }
+
+  :deep(.el-select-dropdown__item.is-disabled) {
+    &:hover {
+      background-color: transparent;
     }
   }
 }

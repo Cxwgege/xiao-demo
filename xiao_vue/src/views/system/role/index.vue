@@ -5,25 +5,36 @@
       <el-form :inline="true" :model="queryParams" class="search-form" @submit.native.prevent>
         <el-form-item>
           <el-input
-            v-model="queryParams.keyword"
-            placeholder="请输入角色名称或编码"
-            clearable
-            @keyup.enter="handleQuery"
+              v-model="queryParams.keyword"
+              placeholder="请输入角色名称或编码"
+              clearable
+              @keyup.enter="handleQuery"
           >
             <template #prefix>
-              <el-icon><Search /></el-icon>
+              <el-icon>
+                <Search/>
+              </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleQuery">
-            <el-icon><Search /></el-icon>搜索
+            <el-icon>
+              <Search/>
+            </el-icon>
+            搜索
           </el-button>
           <el-button @click="resetQuery">
-            <el-icon><Refresh /></el-icon>重置
+            <el-icon>
+              <Refresh/>
+            </el-icon>
+            重置
           </el-button>
           <el-button type="primary" class="add-button" @click="handleAdd">
-            <el-icon><Plus /></el-icon>新增角色
+            <el-icon>
+              <Plus/>
+            </el-icon>
+            新增角色
           </el-button>
         </el-form-item>
       </el-form>
@@ -33,43 +44,54 @@
     <el-card class="table-card">
       <div class="table-wrapper">
         <el-table
-          v-loading="loading"
-          :data="roleList"
-          border
-          style="width: 100%"
-          :header-cell-style="{ background: '#f5f7fa' }"
-          max-height="calc(100vh - 380px)"
-          class="show-scrollbar"
+            size="small"
+            v-loading="loading"
+            :data="roleList"
+            border
+            style="width: 100%"
+            :header-cell-style="{ background: '#f5f7fa' }"
+            max-height="calc(100vh - 380px)"
+            class="show-scrollbar"
         >
-          <el-table-column type="index" label="序号" width="60" align="center" />
-          <el-table-column prop="name" label="角色名称" min-width="120" />
-          <el-table-column prop="code" label="角色编码" min-width="120" />
-          <el-table-column prop="description" label="角色描述" min-width="180" show-overflow-tooltip />
-          <el-table-column prop="status" label="状态" width="100" align="center">
+          <el-table-column type="index" label="序号" width="60" align="center"/>
+          <el-table-column prop="name" label="角色名称" min-width="120"/>
+          <el-table-column prop="code" label="角色编码" min-width="120"/>
+          <el-table-column prop="description" label="角色描述" min-width="180" show-overflow-tooltip/>
+          <el-table-column prop="status" label="状态" width="70" align="center">
             <template #default="{ row }">
               <el-tag
-                :type="row.status === 1 ? 'success' : 'danger'"
+                  :type="row.status === 1 ? 'success' : 'danger'"
               >
                 {{ row.status === 1 ? '正常' : '禁用' }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="180" align="center" />
+          <el-table-column prop="createTime" label="创建时间" width="180" align="center">
+            <template #default="{ row }">
+              {{ formatDateTime(row.createTime) }}
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="280" align="center" fixed="right">
             <template #default="{ row }">
               <div class="operation-group">
                 <el-switch
-                  v-model="row.status"
-                  :active-value="1"
-                  :inactive-value="0"
-                  style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-                  @change="handleStatusChange(row)"
+                    v-model="row.status"
+                    :active-value="1"
+                    :inactive-value="0"
+                    style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                    @change="handleStatusChange(row)"
                 />
                 <el-button type="primary" link @click="handleEdit(row)">
-                  <el-icon><Edit /></el-icon>编辑
+                  <el-icon>
+                    <Edit/>
+                  </el-icon>
+                  编辑
                 </el-button>
                 <el-button type="danger" link @click="handleDelete(row)">
-                  <el-icon><Delete /></el-icon>删除
+                  <el-icon>
+                    <Delete/>
+                  </el-icon>
+                  删除
                 </el-button>
               </div>
             </template>
@@ -80,30 +102,31 @@
         <div class="pagination-wrapper">
           <el-pagination
               size="small"
-            v-model:current-page="queryParams.current"
-            v-model:page-size="queryParams.size"
-            :total="total"
-            :page-sizes="[10, 20, 30, 50]"
-            layout="total, sizes, prev, pager, next, jumper"
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+              v-model:current-page="queryParams.current"
+              v-model:page-size="queryParams.size"
+              :total="total"
+              :page-sizes="[10, 20, 30, 50]"
+              layout="total, sizes, prev, pager, next, jumper"
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
           />
         </div>
       </div>
     </el-card>
 
     <!-- 添加表单组件 -->
-    <role-form ref="roleFormRef" @success="handleQuery" />
+    <role-form ref="roleFormRef" @success="handleQuery"/>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { getRolePage, deleteRole, updateRole } from '@/api/role'
-import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
+import {ref, onMounted} from 'vue'
+import {ElMessage, ElMessageBox} from 'element-plus'
+import {getRolePage, deleteRole, updateRole} from '@/api/role'
+import {Search, Refresh, Plus, Edit, Delete} from '@element-plus/icons-vue'
 import RoleForm from './components/RoleForm.vue'
+import {formatDateTime} from '@/utils/format'
 
 // 查询参数
 const queryParams = ref({
@@ -121,7 +144,7 @@ const loading = ref(false)
 const getList = async () => {
   loading.value = true
   try {
-    const { data } = await getRolePage(queryParams.value)
+    const {data} = await getRolePage(queryParams.value)
     roleList.value = data.records
     total.value = data.total
   } catch (error) {
@@ -162,13 +185,13 @@ const handleCurrentChange = (val) => {
 // 删除角色
 const handleDelete = (row) => {
   ElMessageBox.confirm(
-    '确定要删除该角色吗？',
-    '警告',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }
+      '确定要删除该角色吗？',
+      '警告',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
   ).then(async () => {
     try {
       await deleteRole(row.id)
@@ -177,7 +200,8 @@ const handleDelete = (row) => {
     } catch (error) {
       console.error('删除角色失败：', error)
     }
-  }).catch(() => {})
+  }).catch(() => {
+  })
 }
 
 // 编辑角色
@@ -212,7 +236,7 @@ onMounted(() => {
 })
 </script>
 
-<style  lang="scss" scoped>
+<style lang="scss" scoped>
 .role-container {
   height: 100%;
   padding: 20px;
@@ -225,13 +249,14 @@ onMounted(() => {
 
 .search-card {
   margin-bottom: 0;
+
   :deep(.el-card__body) {
     padding: 16px 20px;
   }
 }
 
 .search-form {
-  margin-bottom:-18px;
+  margin-bottom: -18px;
 
   :deep(.el-input__wrapper) {
     background-color: #fff;
@@ -353,7 +378,6 @@ onMounted(() => {
 :deep(.el-button--danger.is-link:hover) {
   color: #ff4d4f;
 }
-
 
 
 /* 修改表格操作列按钮样式 */

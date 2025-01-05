@@ -44,6 +44,7 @@
     <el-card class="table-card">
       <div class="table-wrapper">
         <el-table
+            size="small"
             v-loading="loading"
             :data="userList"
             border
@@ -53,11 +54,11 @@
             class="show-scrollbar"
         >
           <el-table-column type="index" label="序号" width="60" align="center" header-align="center"/>
-          <el-table-column prop="username" label="用户名" align="center" header-align="center"/>
-          <el-table-column prop="nickname" label="昵称" align="center" header-align="center"/>
-          <el-table-column prop="email" label="邮箱" align="center" header-align="center"/>
-          <el-table-column prop="phone" label="手机号" align="center" header-align="center"/>
-          <el-table-column prop="roles" label="角色" min-width="200" align="center" header-align="center">
+          <el-table-column prop="username" label="用户名" min-width="120" align="center" header-align="center"/>
+          <el-table-column prop="nickname" label="昵称" min-width="120" align="center" header-align="center"/>
+          <el-table-column prop="email" label="邮箱" min-width="180" align="center" header-align="center"/>
+          <el-table-column prop="phone" label="手机号" width="120"  align="center" header-align="center"/>
+          <el-table-column prop="roles" label="角色" min-width="300" align="center" header-align="center">
             <template #default="{ row }">
               <el-tag
                   v-for="role in row.roles"
@@ -70,15 +71,19 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="状态" width="80" align="center" header-align="center">
+          <el-table-column prop="status" label="状态" width="70" align="center" header-align="center">
             <template #default="{ row }">
               <el-tag :type="row.status === 1 ? 'success' : 'danger'">
                 {{ row.status === 1 ? '正常' : '禁用' }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center"/>
-          <el-table-column label="操作" width="280" align="center" fixed="right">
+          <el-table-column prop="createTime" label="创建时间" width="180" align="center" header-align="center">
+            <template #default="{ row }">
+              {{ formatDateTime(row.createTime) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="300" align="center" fixed="right">
             <template #default="{ row }">
               <div class="operation-group">
                 <el-switch
@@ -138,6 +143,7 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 import {Search, Refresh, Plus, Edit, Delete} from '@element-plus/icons-vue'
 import {getUserPage, deleteUser, resetPassword, updateUser} from '@/api/user'
 import UserForm from './components/UserForm.vue'
+import { formatDateTime } from '@/utils/format'
 
 // 查询参数
 const queryParams = ref({
