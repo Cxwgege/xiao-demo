@@ -92,6 +92,9 @@
         </div>
       </div>
     </el-card>
+
+    <!-- 添加表单组件 -->
+    <role-form ref="roleFormRef" @success="handleQuery" />
   </div>
 </template>
 
@@ -100,6 +103,7 @@ import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getRolePage, deleteRole, updateRole } from '@/api/role'
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue'
+import RoleForm from './components/RoleForm.vue'
 
 // 查询参数
 const queryParams = ref({
@@ -178,14 +182,12 @@ const handleDelete = (row) => {
 
 // 编辑角色
 const handleEdit = (row) => {
-  // TODO: 实现编辑功能
-  console.log('编辑角色：', row)
+  roleFormRef.value?.open(row)
 }
 
 // 新增角色
 const handleAdd = () => {
-  // TODO: 实现新增功能
-  console.log('新增角色')
+  roleFormRef.value?.open()
 }
 
 // 添加状态变更处理函数
@@ -201,6 +203,8 @@ const handleStatusChange = async (row) => {
     console.error('更新状态失败：', error)
   }
 }
+
+const roleFormRef = ref(null)
 
 // 页面加载时获取数据
 onMounted(() => {
