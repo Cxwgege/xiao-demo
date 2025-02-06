@@ -1,12 +1,6 @@
 import Layout from '@/layout/index.vue'
 
-// 创建组件映射表
-const componentMap = {
-  'system/user/index': () => import('@/views/system/user/index.vue'),
-  'system/role/index': () => import('@/views/system/role/index.vue'),
-  'system/menu/index': () => import('@/views/system/menu/index.vue'),
-  'home/index': () => import('@/views/home/index.vue'),
-}
+const modules = import.meta.glob("../views/**");
 
 export function generateRoutes(menus) {
   const routes = []
@@ -25,7 +19,7 @@ export function generateRoutes(menus) {
       // 添加子路由
       menus.forEach(subMenu => {
         if (subMenu.parentId === menu.id && subMenu.type === 1) {
-          const component = componentMap[subMenu.component]
+          const component =modules[`../views/${subMenu.component}.vue`]
           if (!component) {
             console.warn(`未找到组件: ${subMenu.component}`)
             return
@@ -45,7 +39,8 @@ export function generateRoutes(menus) {
       
       routes.push(route)
     } else if (menu.type === 1 && menu.parentId === 0) { // 一级菜单
-      const component = componentMap[menu.component]
+      //const component = componentMap[menu.component]
+      const component =modules[`../views/${menu.component}.vue`]
       if (!component) {
         console.warn(`未找到组件: ${menu.component}`)
         return
