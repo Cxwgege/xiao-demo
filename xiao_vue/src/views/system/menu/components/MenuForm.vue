@@ -47,7 +47,20 @@
         <el-input v-model="form.permission" placeholder="请输入权限标识"/>
       </el-form-item>
       <el-form-item label="菜单图标" prop="icon" v-if="form.type !== 2">
-        <el-input v-model="form.icon" placeholder="请输入菜单图标"/>
+        <el-input v-model="form.icon" placeholder="请输入菜单图标">
+          <template #prefix>
+            <el-icon v-if="isElementIcon" :class="form.icon">
+              <component :is="form.icon"/>
+            </el-icon>
+            <svg v-else-if="form.icon" class="icon" aria-hidden="true">
+              <use :xlink:href="form.icon"></use>
+            </svg>
+            <el-icon v-else><Menu /></el-icon>
+          </template>
+        </el-input>
+        <div class="icon-tip" style="font-size: 12px; color: #909399; margin-top: 5px;">
+          提示: 支持Element Plus图标(例如: Edit)或阿里图标(例如: #icon-xxx)
+        </div>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="form.sort" :min="0" :max="999"/>
@@ -67,9 +80,10 @@
 </template>
 
 <script setup>
-import {ref, reactive} from 'vue'
+import {ref, reactive, computed} from 'vue'
 import {ElMessage} from 'element-plus'
 import {addMenu, updateMenu} from '@/api/menu'
+import { Menu } from '@element-plus/icons-vue'
 
 const emit = defineEmits(['success'])
 const formRef = ref(null)
@@ -92,12 +106,33 @@ const form = reactive({
   status: 1
 })
 
+// 判断是否为Element Plus图标
+const isElementIcon = computed(() => {
+  return form.icon && !form.icon.startsWith('#icon-')
+})
+
 const rules = {
   title: [{required: true, message: '请输入菜单名称', trigger: 'blur'}],
   type: [{required: true, message: '请选择菜单类型', trigger: 'change'}],
   name: [{required: true, message: '请输入路由名称', trigger: 'blur'}],
   path: [{required: true, message: '请输入路由路径', trigger: 'blur'}],
-  component: [{required: true, message: '请输入组件路径', trigger: 'blur'}]
+  component: [{required: true, message: '请输入组件路径', trigger: 'blur'}],
+  icon: [
+    { 
+      validator: (rule, value, callback) => {
+        if (!value) {
+          callback()
+        } else if (value.startsWith('#icon-')) {
+          callback()
+        } else if (!value.match(/^[A-Z][a-zA-Z]*$/)) {
+          callback(new Error('Element图标格式应为: 首字母大写的图标名'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
 }
 
 // 打开弹窗
@@ -157,10 +192,17 @@ defineExpose({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .menu-form-dialog {
   :deep(.el-dialog__body) {
     padding: 20px;
+  }
+  
+  .icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    fill: currentColor;
   }
 }
 </style> 

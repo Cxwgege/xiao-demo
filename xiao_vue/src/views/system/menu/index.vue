@@ -5,9 +5,9 @@
       <el-form :inline="true" :model="queryParams" class="search-form" @submit.native.prevent>
         <el-form-item>
           <x-button type="success" @click="handleAdd">
-            <el-icon>
+          <el-icon>
               <Plus/>
-            </el-icon>
+            </el-icon>-->
             新增菜单
           </x-button>
         </el-form-item>
@@ -32,11 +32,16 @@
           <el-table-column prop="path" label="路由路径" min-width="120" show-overflow-tooltip/>
           <el-table-column prop="component" label="组件路径" min-width="150" show-overflow-tooltip/>
           <el-table-column prop="permission" label="权限标识" min-width="150" show-overflow-tooltip/>
-          <el-table-column prop="icon" label="图标" width="80" align="center">
+          <el-table-column label="图标" align="center" width="100">
             <template #default="{ row }">
-              <el-icon v-if="row.icon">
+              <!-- Element Plus 图标 -->
+              <el-icon v-if="isElementIcon(row.icon)" :class="row.icon">
                 <component :is="row.icon"/>
               </el-icon>
+              <!-- 阿里图标库图标 (Symbol方式) -->
+              <svg v-else-if="row.icon" class="icon" aria-hidden="true">
+                <use :xlink:href="row.icon"></use>
+              </svg>
             </template>
           </el-table-column>
           <el-table-column prop="type" label="类型" width="80" align="center">
@@ -98,7 +103,7 @@
 import {ref, onMounted} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {getMenuTree, deleteMenu, updateMenu} from '@/api/menu'
-import {Search, Plus, Refresh, Edit, Delete, Check, Warning} from '@element-plus/icons-vue'
+import {Search, Plus, Refresh, Edit, Delete, Check, Warning, Menu} from '@element-plus/icons-vue'
 import MenuForm from './components/MenuForm.vue'
 import XButton from "@/components/XButton/index.vue";
 
@@ -124,7 +129,6 @@ const getList = async () => {
     loading.value = false
   }
 }
-
 
 // 新增菜单
 const handleAdd = () => {
@@ -171,6 +175,11 @@ const handleStatusChange = async (row) => {
     row.status = row.status === 1 ? 0 : 1 // 恢复状态
     console.error('更新状态失败：', error)
   }
+}
+
+// 判断是否为 Element Plus 图标
+const isElementIcon = (icon) => {
+  return icon && !icon.startsWith('#icon-')
 }
 
 // 页面加载时获取数据
@@ -229,8 +238,6 @@ onMounted(() => {
     }
   }
 }
-
-
 
 .table-card {
   flex: 1;
@@ -298,5 +305,20 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
+}
+
+/* 修改图标样式 */
+:deep(.el-table) {
+  .el-icon {
+    font-size: 18px;
+    vertical-align: middle;
+  }
+  
+  .icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    fill: currentColor;
+  }
 }
 </style>
