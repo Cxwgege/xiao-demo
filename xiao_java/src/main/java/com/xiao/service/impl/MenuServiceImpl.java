@@ -76,7 +76,6 @@ public class MenuServiceImpl implements MenuService {
     public List<Menu> getMenuTree() {
         // 获取所有菜单列表
         List<Menu> menuList = menuMapper.selectList(new LambdaQueryWrapper<Menu>()
-                .eq(Menu::getStatus, 1)
                 .eq(Menu::getIsDeleted, 0)
                 .orderByAsc(Menu::getSort));
 

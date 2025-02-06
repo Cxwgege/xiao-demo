@@ -51,7 +51,6 @@
             style="width: 100%"
             :header-cell-style="{ background: '#f5f7fa' }"
             max-height="calc(100vh - 380px)"
-            class="show-scrollbar"
         >
           <el-table-column type="index" label="序号" width="60" align="center"/>
           <el-table-column prop="name" label="角色名称" min-width="120"/>
@@ -285,11 +284,6 @@ onMounted(() => {
       pointer-events: auto !important;
     }
   }
-}
-
-.toolbar {
-  display: flex;
-  justify-content: flex-start;
 }
 
 .add-button {
