@@ -56,14 +56,14 @@ defineProps({
 }
 
 .x-info-button {
-  background: linear-gradient(135deg, #457fca 0%, #5691c8 100%);
+  background: linear-gradient(135deg, #8e9eab 0%, #eef2f3 100%);
   border: none;
-  color: white;
+  color: #2c3e50;
   
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(69, 127, 202, 0.3);
-    background: linear-gradient(135deg, #5691c8 0%, #457fca 100%);
+    box-shadow: 0 4px 12px rgba(142, 158, 171, 0.3);
+    background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%);
   }
 }
 
@@ -80,14 +80,14 @@ defineProps({
 }
 
 .x-danger-button {
-  background: linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%);
+  background: linear-gradient(135deg, #e74c3c 0%, #ff6b6b 100%);
   border: none;
   color: white;
-  
+
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(203, 45, 62, 0.3);
-    background: linear-gradient(135deg, #ef473a 0%, #cb2d3e 100%);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    background: linear-gradient(135deg, #ff6b6b 0%, #e74c3c 100%);
   }
 }
 </style> 

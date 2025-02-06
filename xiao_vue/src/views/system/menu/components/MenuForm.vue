@@ -26,9 +26,9 @@
       </el-form-item>
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio :label="0">目录</el-radio>
-          <el-radio :label="1">菜单</el-radio>
-          <el-radio :label="2">按钮</el-radio>
+          <el-radio :value="0">目录</el-radio>
+          <el-radio :value="1">菜单</el-radio>
+          <el-radio :value="2">按钮</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="菜单名称" prop="title">
@@ -54,8 +54,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-radio-group v-model="form.status">
-          <el-radio :label="1">正常</el-radio>
-          <el-radio :label="0">禁用</el-radio>
+          <el-radio :value="1">正常</el-radio>
+          <el-radio :value="0">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>

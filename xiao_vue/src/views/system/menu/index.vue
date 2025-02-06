@@ -4,41 +4,12 @@
     <el-card class="search-card">
       <el-form :inline="true" :model="queryParams" class="search-form" @submit.native.prevent>
         <el-form-item>
-          <!-- 或者显式指定 primary -->
-          <x-button type="primary">
-        <el-icon><Plus/></el-icon>
-              新增
-          </x-button>
-
-          <!-- 成功按钮 -->
-          <x-button type="success">
-           <el-icon><Check/></el-icon>
-              确认
-          </x-button>
-
-          <!-- 信息按钮 -->
-          <x-button type="info">
-           <el-icon><Info/></el-icon>
-              信息
-          </x-button>
-
-          <!-- 警告按钮 -->
-          <x-button type="warning">
-           <el-icon><Warning/></el-icon>
-              警告
-          </x-button>
-
-          <!-- 危险按钮 -->
-          <x-button type="danger">
-         <el-icon><Delete/></el-icon>
-              删除
-          </x-button>
-<!--          <el-button type="primary" class="add-button" @click="handleAdd">
+          <x-button type="success" @click="handleAdd">
             <el-icon>
               <Plus/>
             </el-icon>
             新增菜单
-          </el-button>-->
+          </x-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -221,6 +192,7 @@ onMounted(() => {
 
 .search-card {
   margin-bottom: 0;
+
   :deep(.el-card__body) {
     padding: 16px 20px;
   }
@@ -258,16 +230,7 @@ onMounted(() => {
   }
 }
 
-.add-button {
-  background: linear-gradient(135deg, #00d2ff 0%, #928dab 100%);
-  border: none;
-  margin-left: 8px;
 
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 210, 255, 0.3);
-  }
-}
 
 .table-card {
   flex: 1;

@@ -18,24 +18,24 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleQuery">
+          <x-button type="primary" @click="handleQuery">
             <el-icon>
               <Search/>
             </el-icon>
             搜索
-          </el-button>
-          <el-button @click="resetQuery">
+          </x-button>
+          <x-button type="info" @click="resetQuery">
             <el-icon>
               <Refresh/>
             </el-icon>
             重置
-          </el-button>
-          <el-button type="primary" class="add-button" @click="handleAdd">
+          </x-button>
+          <x-button type="success"  @click="handleAdd">
             <el-icon>
               <Plus/>
             </el-icon>
             新增角色
-          </el-button>
+          </x-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -126,6 +126,7 @@ import {getRolePage, deleteRole, updateRole} from '@/api/role'
 import {Search, Refresh, Plus, Edit, Delete} from '@element-plus/icons-vue'
 import RoleForm from './components/RoleForm.vue'
 import {formatDateTime} from '@/utils/format'
+import XButton from "@/components/XButton/index.vue";
 
 // 查询参数
 const queryParams = ref({
@@ -283,17 +284,6 @@ onMounted(() => {
       margin-right: 3px;
       pointer-events: auto !important;
     }
-  }
-}
-
-.add-button {
-  background: linear-gradient(135deg, #00d2ff 0%, #928dab 100%);
-  border: none;
-  margin-left: 8px;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 210, 255, 0.3);
   }
 }
 
