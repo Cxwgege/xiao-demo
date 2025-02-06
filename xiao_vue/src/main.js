@@ -7,6 +7,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import XButton from '@/components/XButton/index.vue'
 
 const app = createApp(App)
 
@@ -23,4 +24,5 @@ app.use(router)
 app.use(ElementPlus, {
   locale: zhCn,
 })
+app.component('XButton', XButton)
 app.mount('#app')

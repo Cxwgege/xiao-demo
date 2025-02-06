@@ -4,12 +4,41 @@
     <el-card class="search-card">
       <el-form :inline="true" :model="queryParams" class="search-form" @submit.native.prevent>
         <el-form-item>
-          <el-button type="primary" @click="handleAdd">
+          <!-- 或者显式指定 primary -->
+          <x-button type="primary">
+        <el-icon><Plus/></el-icon>
+              新增
+          </x-button>
+
+          <!-- 成功按钮 -->
+          <x-button type="success">
+           <el-icon><Check/></el-icon>
+              确认
+          </x-button>
+
+          <!-- 信息按钮 -->
+          <x-button type="info">
+           <el-icon><Info/></el-icon>
+              信息
+          </x-button>
+
+          <!-- 警告按钮 -->
+          <x-button type="warning">
+           <el-icon><Warning/></el-icon>
+              警告
+          </x-button>
+
+          <!-- 危险按钮 -->
+          <x-button type="danger">
+         <el-icon><Delete/></el-icon>
+              删除
+          </x-button>
+<!--          <el-button type="primary" class="add-button" @click="handleAdd">
             <el-icon>
               <Plus/>
             </el-icon>
             新增菜单
-          </el-button>
+          </el-button>-->
         </el-form-item>
       </el-form>
     </el-card>
@@ -98,8 +127,9 @@
 import {ref, onMounted} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {getMenuTree, deleteMenu, updateMenu} from '@/api/menu'
-import {Search, Plus, Refresh, Edit, Delete} from '@element-plus/icons-vue'
+import {Search, Plus, Refresh, Edit, Delete, Check, Warning} from '@element-plus/icons-vue'
 import MenuForm from './components/MenuForm.vue'
+import XButton from "@/components/XButton/index.vue";
 
 // 查询参数
 const queryParams = ref({
