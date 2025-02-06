@@ -3,6 +3,7 @@ package com.xiao.domain.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @TableName("menu")
@@ -33,4 +34,7 @@ public class Menu {
     
     @TableLogic
     private Integer isDeleted;
+
+    @TableField(exist = false)
+    private List<Menu> children;
 } 
