@@ -284,6 +284,7 @@ const removeTab = (targetPath) => {
   border-radius: 4px;
   margin: 4px 10px;
   width: calc(100% - 20px);
+  box-sizing: unset;
 }
 
 .el-menu-vertical :deep(.el-sub-menu__title) {
