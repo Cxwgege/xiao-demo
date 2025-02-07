@@ -70,28 +70,12 @@
               {{ formatDateTime(row.createTime) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="280" align="center" fixed="right">
+          <el-table-column label="操作" width="200" fixed="right">
             <template #default="{ row }">
               <div class="operation-group">
-                <el-switch
-                    v-model="row.status"
-                    :active-value="1"
-                    :inactive-value="0"
-                    style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-                    @change="handleStatusChange(row)"
-                />
-                <el-button type="primary" link @click="handleEdit(row)">
-                  <el-icon>
-                    <Edit/>
-                  </el-icon>
-                  编辑
-                </el-button>
-                <el-button type="danger" link @click="handleDelete(row)">
-                  <el-icon>
-                    <Delete/>
-                  </el-icon>
-                  删除
-                </el-button>
+                <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
+                <el-button type="primary" link @click="handlePermission(row)">分配权限</el-button>
+                <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
               </div>
             </template>
           </el-table-column>
@@ -116,17 +100,22 @@
 
     <!-- 添加表单组件 -->
     <role-form ref="roleFormRef" @success="handleQuery"/>
+
+    <!-- 添加菜单权限分配对话框组件 -->
+    <menu-permission ref="menuPermissionRef" />
   </div>
 </template>
 
 <script setup>
 import {ref, onMounted} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {getRolePage, deleteRole, updateRole} from '@/api/role'
+import {getRolePage, deleteRole, updateRole} from '@/api/system/role.js'
 import {Search, Refresh, Plus, Edit, Delete} from '@element-plus/icons-vue'
 import RoleForm from './components/RoleForm.vue'
 import {formatDateTime} from '@/utils/format'
 import XButton from "@/components/XButton/index.vue";
+import MenuPermission from './components/MenuPermission.vue'
+import { getMenuTree } from '@/api/system/menu.js'
 
 // 查询参数
 const queryParams = ref({
@@ -229,10 +218,28 @@ const handleStatusChange = async (row) => {
 }
 
 const roleFormRef = ref(null)
+const menuPermissionRef = ref(null)
+const menuTree = ref([])
+
+// 获取菜单树
+const getMenuTreeData = async () => {
+  try {
+    const { data } = await getMenuTree()
+    menuTree.value = data
+  } catch (error) {
+    console.error('获取菜单树失败：', error)
+  }
+}
+
+// 处理分配权限
+const handlePermission = (row) => {
+  menuPermissionRef.value?.openDialog(row.id, menuTree.value)
+}
 
 // 页面加载时获取数据
 onMounted(() => {
   getList()
+  getMenuTreeData()
 })
 </script>
 

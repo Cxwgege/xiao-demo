@@ -52,7 +52,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { addRole, updateRole } from '@/api/role'
+import { addRole, updateRole } from '@/api/system/role.js'
 
 const emit = defineEmits(['success'])
 const formRef = ref(null)

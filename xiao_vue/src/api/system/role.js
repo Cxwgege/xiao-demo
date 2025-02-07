@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request.js'
 
 // 获取角色分页列表
 export function getRolePage(params) {
@@ -32,5 +32,22 @@ export function deleteRole(id) {
   return request({
     url: `/role/${id}`,
     method: 'delete'
+  })
+}
+
+// 获取角色的菜单ID列表
+export function getRoleMenuIds(roleId) {
+  return request({
+    url: `/role/menus/${roleId}`,
+    method: 'get'
+  })
+}
+
+// 更新角色的菜单权限
+export function updateRoleMenus(data) {
+  return request({
+    url: '/role/menus',
+    method: 'put',
+    data
   })
 } 

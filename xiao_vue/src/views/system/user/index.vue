@@ -141,7 +141,7 @@
 import {ref, onMounted} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Search, Refresh, Plus, Edit, Delete} from '@element-plus/icons-vue'
-import {getUserPage, deleteUser, resetPassword, updateUser} from '@/api/user'
+import {getUserPage, deleteUser, resetPassword, updateUser} from '@/api/system/user.js'
 import UserForm from './components/UserForm.vue'
 import { formatDateTime } from '@/utils/format'
 

@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request.js'
 
 // 获取用户分页列表
 export function getUserPage(params) {

@@ -102,7 +102,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {getMenuTree, deleteMenu, updateMenu} from '@/api/menu'
+import {getMenuTree, deleteMenu, updateMenu} from '@/api/system/menu.js'
 import {Search, Plus, Refresh, Edit, Delete, Check, Warning, Menu} from '@element-plus/icons-vue'
 import MenuForm from './components/MenuForm.vue'
 import XButton from "@/components/XButton/index.vue";

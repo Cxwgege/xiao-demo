@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request.js'
 
 // 获取菜单树
 export function getMenuTree() {

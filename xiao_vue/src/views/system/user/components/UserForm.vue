@@ -86,8 +86,8 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { addUser, updateUser } from '@/api/user'
-import { getRolePage } from '@/api/role'
+import { addUser, updateUser } from '@/api/system/user.js'
+import { getRolePage } from '@/api/system/role.js'
 
 const emit = defineEmits(['success'])
 const formRef = ref(null)

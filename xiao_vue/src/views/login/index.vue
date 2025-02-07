@@ -56,7 +56,7 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
-import { authApi } from '@/api/auth'
+import { authApi } from '@/api/system/auth.js'
 
 const router = useRouter()
 const userStore = useUserStore()

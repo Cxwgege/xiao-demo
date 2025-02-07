@@ -82,7 +82,7 @@
 <script setup>
 import {ref, reactive, computed} from 'vue'
 import {ElMessage} from 'element-plus'
-import {addMenu, updateMenu} from '@/api/menu'
+import {addMenu, updateMenu} from '@/api/system/menu.js'
 import { Menu } from '@element-plus/icons-vue'
 
 const emit = defineEmits(['success'])
