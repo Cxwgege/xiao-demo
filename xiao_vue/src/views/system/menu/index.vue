@@ -7,7 +7,7 @@
           <x-button type="success" @click="handleAdd">
           <el-icon>
               <Plus/>
-            </el-icon>-->
+            </el-icon>
             新增菜单
           </x-button>
         </el-form-item>
@@ -59,7 +59,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="180" fixed="right" align="center">
+          <el-table-column label="操作" width="220" fixed="right" align="center">
             <template #default="{ row }">
               <div class="operation-group">
                 <el-switch

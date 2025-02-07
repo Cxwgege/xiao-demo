@@ -40,25 +40,46 @@
               <!-- 目录 -->
               <el-sub-menu v-if="menu.type === 0" :index="`/${menu.path}`">
                 <template #title>
-                  <el-icon><component :is="menu.icon" /></el-icon>
+                  <!-- Element Plus 图标 -->
+                  <el-icon v-if="isElementIcon(menu.icon)">
+                    <component :is="menu.icon"/>
+                  </el-icon>
+                  <!-- 阿里图标库图标 (Symbol方式) -->
+                  <svg v-else-if="menu.icon" class="icon" aria-hidden="true" style="width: 1.6em">
+                    <use :xlink:href="menu.icon"></use>
+                  </svg>
                   <span>{{ menu.title }}</span>
                 </template>
                 <!-- 菜单 -->
-                <el-menu-item 
+                <el-menu-item
                   v-for="child in menu.children"
                   :key="child.id"
                   :index="`${menu.path}/${child.path}`"
                 >
-                  <el-icon><component :is="child.icon" /></el-icon>
+                  <!-- Element Plus 图标 -->
+                  <el-icon v-if="isElementIcon(child.icon)">
+                    <component :is="child.icon"/>
+                  </el-icon>
+                  <!-- 阿里图标库图标 (Symbol方式) -->
+                  <svg v-else-if="child.icon" class="icon" aria-hidden="true" style="width: 1.6em">
+                    <use :xlink:href="child.icon"></use>
+                  </svg>
                   <span>{{ child.title }}</span>
                 </el-menu-item>
               </el-sub-menu>
               <!-- 一级菜单 -->
-              <el-menu-item 
-                v-else-if="menu.type === 1" 
+              <el-menu-item
+                v-else-if="menu.type === 1"
                 :index="`/${menu.path}`"
               >
-                <el-icon><component :is="menu.icon" /></el-icon>
+                <!-- Element Plus 图标 -->
+                <el-icon v-if="isElementIcon(menu.icon)">
+                  <component :is="menu.icon"/>
+                </el-icon>
+                <!-- 阿里图标库图标 (Symbol方式) -->
+                <svg v-else-if="menu.icon" class="icon" aria-hidden="true"  style="width: 1.6em">
+                  <use :xlink:href="menu.icon"></use>
+                </svg>
                 <span>{{ menu.title }}</span>
               </el-menu-item>
             </template>
@@ -96,7 +117,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { House } from '@element-plus/icons-vue'
+import { House, Menu } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const route = useRoute()
@@ -110,24 +131,29 @@ const isCollapse = ref(false)
 const menuTree = computed(() => {
   const menus = userStore.menus
   console.log('原始菜单数据：', menus)
-  
+
   if (!Array.isArray(menus)) {
     console.warn('菜单数据不是数组：', menus)
     return []
   }
-  
+
   // 找到所有根菜单（parentId === 0），包括首页
   const rootMenus = menus.filter(menu => menu.parentId === 0)
   console.log('根菜单：', rootMenus)
-  
+
   // 为每个根菜单动态添加其子菜单
   rootMenus.forEach(rootMenu => {
     rootMenu.children = menus.filter(menu => menu.parentId === rootMenu.id)
     console.log(`${rootMenu.title} 的子菜单：`, rootMenu.children)
   })
-  
+
   return rootMenus
 })
+
+// 判断是否为Element Plus图标
+const isElementIcon = (icon) => {
+  return icon && !icon.startsWith('#icon-')
+}
 
 // 处理下拉菜单命令
 const handleCommand = (command) => {
@@ -147,7 +173,7 @@ const visitedViews = ref([
 watch(() => route.path, (newPath) => {
   const currentRoute = router.currentRoute.value
   const title = currentRoute.meta?.title
-  
+
   if (title && newPath !== '/home') {
     const isExist = visitedViews.value.some(view => view.path === newPath)
     if (!isExist) {
@@ -169,7 +195,7 @@ const handleClick = (tab) => {
 const removeTab = (targetPath) => {
   const tabs = visitedViews.value
   let activePath = activeTab.value
-  
+
   if (activePath === targetPath) {
     tabs.forEach((tab, index) => {
       if (tab.path === targetPath) {
@@ -180,7 +206,7 @@ const removeTab = (targetPath) => {
       }
     })
   }
-  
+
   activeTab.value = activePath
   visitedViews.value = tabs.filter(tab => tab.path !== targetPath)
   router.push(activePath)
@@ -377,7 +403,7 @@ const removeTab = (targetPath) => {
     transition: all 0.3s;
     position: relative;
     top: 0;
-    
+
     .close-icon {
       pointer-events: auto !important;
     }
@@ -427,7 +453,7 @@ const removeTab = (targetPath) => {
     transition: all 0.3s;
     position: relative;
     top: 0;
-    
+
     .close-icon {
       pointer-events: auto !important;
     }
@@ -485,7 +511,7 @@ const removeTab = (targetPath) => {
     transition: all 0.3s;
     position: relative;
     top: 0;
-    
+
     .close-icon {
       pointer-events: auto !important;
     }
@@ -509,17 +535,13 @@ const removeTab = (targetPath) => {
   background-color: #f8fafc;
   cursor: pointer;
   transition: all 0.3s;
-  
+
   &:hover {
     background-color: #edf2f7;
   }
 }
 
-.fold-icon {
-  font-size: 14px;
-  color: #475569;
-  pointer-events: none; /* 禁用鼠标事件 */
-}
+
 
 /* 覆盖 el-icon 的默认样式 */
 :deep(.el-icon) {
@@ -531,10 +553,37 @@ const removeTab = (targetPath) => {
   cursor: pointer;
   border-radius: 50%;
   transition: all 0.3s;
-  
+
   &:hover {
     background-color: #ff4d4f;
     color: #fff;
+  }
+}
+
+/* 修改图标样式 */
+.el-menu-vertical {
+  :deep(.el-menu-item),
+  :deep(.el-sub-menu__title) {
+    .el-icon {
+      font-size: 18px;
+      vertical-align: middle;
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+      fill: currentColor;
+      margin-right: 5px;
+    }
+  }
+}
+
+/* 激活状态下的图标颜色 */
+.el-menu-vertical :deep(.el-menu-item.is-active) {
+  .el-icon,
+  .icon {
+    color: white;
   }
 }
 </style> 
