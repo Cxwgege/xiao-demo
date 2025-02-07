@@ -13,6 +13,7 @@
       node-key="id"
       :props="defaultProps"
       :default-checked-keys="checkedKeys"
+      :default-expand-all="true"
       check-strictly
     />
     <template #footer>
@@ -49,7 +50,7 @@ const openDialog = async (roleId, menus) => {
     title: '全部菜单',
     children: menus
   }]
-  
+
   try {
     // 获取角色已分配的菜单ID
     const { data } = await getRoleMenuIds(roleId)
@@ -65,7 +66,7 @@ const handleSubmit = async () => {
   const menuIds = checkedNodes
     .filter(node => node.id !== 0) // 排除根节点
     .map(node => node.id)
-  
+
   try {
     await updateRoleMenus({
       roleId: currentRoleId.value,
@@ -99,13 +100,13 @@ defineExpose({
 
 :deep(.el-tree) {
   background: none;
-  
+
   .el-tree-node__content {
     height: 32px;
-    
+
     &:hover {
       background-color: #f0f2f5;
     }
   }
 }
-</style> 
+</style>

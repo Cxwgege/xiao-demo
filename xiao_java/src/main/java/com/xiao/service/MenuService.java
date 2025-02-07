@@ -34,4 +34,14 @@ public interface MenuService {
      * 删除菜单
      */
     void deleteMenu(Long id);
+
+    /**
+     * 获取角色的菜单ID列表
+     */
+    List<Long> getRoleMenuIds(Long roleId);
+
+    /**
+     * 更新角色菜单权限
+     */
+    void updateRoleMenus(Long roleId, List<Long> menuIds);
 } 

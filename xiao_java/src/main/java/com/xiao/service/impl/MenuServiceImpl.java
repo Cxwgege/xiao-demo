@@ -123,6 +123,23 @@ public class MenuServiceImpl implements MenuService {
         menuMapper.deleteById(id);
     }
 
+    @Override
+    public List<Long> getRoleMenuIds(Long roleId) {
+        return menuMapper.selectMenuIdsByRoleId(roleId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateRoleMenus(Long roleId, List<Long> menuIds) {
+        // 先删除原有的关联关系
+        menuMapper.deleteRoleMenus(roleId);
+        
+        // 如果菜单ID列表不为空，则批量插入新的关联关系
+        if (!menuIds.isEmpty()) {
+            menuMapper.insertRoleMenus(roleId, menuIds);
+        }
+    }
+
     /**
      * 构建菜单树
      */

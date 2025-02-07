@@ -17,4 +17,19 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * 根据用户ID查询菜单列表
      */
     List<Menu> selectMenusByUserId(@Param("userId") Long userId);
+
+    /**
+     * 获取角色的菜单ID列表
+     */
+    List<Long> selectMenuIdsByRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * 删除角色的所有菜单关联
+     */
+    void deleteRoleMenus(@Param("roleId") Long roleId);
+
+    /**
+     * 批量插入角色菜单关联
+     */
+    void insertRoleMenus(@Param("roleId") Long roleId, @Param("menuIds") List<Long> menuIds);
 } 
