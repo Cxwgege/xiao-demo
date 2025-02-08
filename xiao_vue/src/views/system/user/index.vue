@@ -18,19 +18,19 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <x-button type="primary" @click="handleQuery">
+          <x-button type="primary" @click="handleQuery" v-permission="'system:user:search'">
             <el-icon>
               <Search/>
             </el-icon>
             搜索
           </x-button>
-          <x-button type="info" @click="resetQuery">
+          <x-button type="info" @click="resetQuery"  v-permission="'system:user:reset'">
             <el-icon>
               <Refresh/>
             </el-icon>
             重置
           </x-button>
-          <x-button type="success" class="add-button" @click="handleAdd">
+          <x-button type="success" class="add-button" @click="handleAdd" v-permission="'system:user:add'">
             <el-icon>
               <Plus/>
             </el-icon>
@@ -87,25 +87,26 @@
             <template #default="{ row }">
               <div class="operation-group">
                 <el-switch
+                    v-permission="'system:user:status'"
                     v-model="row.status"
                     :active-value="1"
                     :inactive-value="0"
                     style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
                     @change="handleStatusChange(row)"
                 />
-                <el-button type="primary" link @click="handleUpdate(row)">
+                <el-button type="primary" link @click="handleUpdate(row)" v-permission="'system:user:edit'">
                   <el-icon>
                     <Edit/>
                   </el-icon>
                   编辑
                 </el-button>
-                <el-button type="primary" link @click="handleResetPassword(row)">
+                <el-button type="primary" link @click="handleResetPassword(row)" v-permission="'system:user:password'">
                   <el-icon>
                     <Edit/>
                   </el-icon>
                   重置密码
                 </el-button>
-                <el-button type="danger" link @click="handleDelete(row)">
+                <el-button type="danger" link @click="handleDelete(row)"v-permission="'system:user:delete'">
                   <el-icon>
                     <Delete/>
                   </el-icon>

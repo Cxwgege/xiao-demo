@@ -87,7 +87,7 @@ public class MenuServiceImpl implements MenuService {
     @Transactional
     public void addMenu(MenuDTO menuDTO) {
         // 检查同级菜单名称是否重复
-        checkMenuName(menuDTO.getName(), menuDTO.getParentId(), null);
+        checkMenuName(menuDTO.getTitle(), menuDTO.getParentId(), null);
         
         Menu menu = new Menu();
         BeanUtil.copyProperties(menuDTO, menu);
@@ -153,12 +153,10 @@ public class MenuServiceImpl implements MenuService {
     /**
      * 检查同级菜单名称是否重复
      */
-    private void checkMenuName(String name, Long parentId, Long id) {
+    private void checkMenuName(String title, Long parentId, Long id) {
         LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<Menu>()
-                .eq(Menu::getName, name)
-                .eq(Menu::getParentId, parentId)
-                .eq(Menu::getIsDeleted, 0);
-                
+                .eq(Menu::getTitle, title)
+                .eq(Menu::getParentId, parentId);
         if (id != null) {
             wrapper.ne(Menu::getId, id);
         }

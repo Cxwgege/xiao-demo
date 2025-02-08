@@ -18,19 +18,19 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <x-button type="primary" @click="handleQuery">
+          <x-button type="primary" @click="handleQuery" v-permission="'system:role:search'">
             <el-icon>
               <Search/>
             </el-icon>
             搜索
           </x-button>
-          <x-button type="info" @click="resetQuery">
+          <x-button type="info" @click="resetQuery" v-permission="'system:role:reset'">
             <el-icon>
               <Refresh/>
             </el-icon>
             重置
           </x-button>
-          <x-button type="success"  @click="handleAdd">
+          <x-button type="success" @click="handleAdd" v-permission="'system:role:add'">
             <el-icon>
               <Plus/>
             </el-icon>
@@ -70,12 +70,35 @@
               {{ formatDateTime(row.createTime) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="200" fixed="right">
+          <el-table-column label="操作" width="280" fixed="right">
             <template #default="{ row }">
               <div class="operation-group">
-                <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
-                <el-button type="primary" link @click="handlePermission(row)">分配权限</el-button>
-                <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+                <el-switch
+                    v-permission="'system:role:status'"
+                    v-model="row.status"
+                    :active-value="1"
+                    :inactive-value="0"
+                    style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                    @change="handleStatusChange(row)"
+                />
+                <el-button type="primary" link @click="handleEdit(row)"     v-permission="'system:role:edit'">
+                  <el-icon>
+                    <Edit/>
+                  </el-icon>
+                  编辑
+                </el-button>
+                <el-button type="primary" link @click="handlePermission(row)" v-permission="'system:role:permission'">
+                  <el-icon>
+                    <Aim/>
+                  </el-icon>
+                  分配权限
+                </el-button>
+                <el-button type="danger" link @click="handleDelete(row)" v-permission="'system:role:delete'">
+                  <el-icon>
+                    <Delete/>
+                  </el-icon>
+                  删除
+                </el-button>
               </div>
             </template>
           </el-table-column>
@@ -102,7 +125,7 @@
     <role-form ref="roleFormRef" @success="handleQuery"/>
 
     <!-- 添加菜单权限分配对话框组件 -->
-    <menu-permission ref="menuPermissionRef" />
+    <menu-permission ref="menuPermissionRef"/>
   </div>
 </template>
 
@@ -115,7 +138,7 @@ import RoleForm from './components/RoleForm.vue'
 import {formatDateTime} from '@/utils/format'
 import XButton from "@/components/XButton/index.vue";
 import MenuPermission from './components/MenuPermission.vue'
-import { getMenuTree } from '@/api/system/menu.js'
+import {getMenuTree} from '@/api/system/menu.js'
 
 // 查询参数
 const queryParams = ref({
@@ -224,7 +247,7 @@ const menuTree = ref([])
 // 获取菜单树
 const getMenuTreeData = async () => {
   try {
-    const { data } = await getMenuTree()
+    const {data} = await getMenuTree()
     menuTree.value = data
   } catch (error) {
     console.error('获取菜单树失败：', error)

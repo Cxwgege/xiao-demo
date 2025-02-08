@@ -5,6 +5,7 @@ export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const userInfo = ref(null)
   const menus = ref([])
+  const permissions = ref([])
 
   // 设置token
   function setToken(newToken) {
@@ -14,10 +15,13 @@ export const useUserStore = defineStore('user', () => {
   // 设置用户信息
   function setUserInfo(info) {
     userInfo.value = info.userInfo
-    // 确保menus数据正确设置
-    if (info.userInfo && Array.isArray(info.userInfo.menus)) {
-      menus.value = info.userInfo.menus
-      console.log('存储的菜单数据：', menus.value)
+    if (info.userInfo) {
+      if (Array.isArray(info.userInfo.menus)) {
+        menus.value = info.userInfo.menus
+      }
+      if (Array.isArray(info.userInfo.perms)) {
+        permissions.value = info.userInfo.perms
+      }
     }
   }
 
@@ -26,12 +30,14 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
     userInfo.value = null
     menus.value = []
+    permissions.value = []
   }
 
   return {
     token,
     userInfo,
     menus,
+    permissions,
     setToken,
     setUserInfo,
     clearUserInfo

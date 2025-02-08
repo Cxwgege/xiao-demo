@@ -12,6 +12,10 @@
 </template>
 
 <script setup>
+import { useAttrs } from 'vue'
+
+const attrs = useAttrs()
+
 defineProps({
   type: {
     type: String,
@@ -19,6 +23,12 @@ defineProps({
     validator: (value) => ['primary', 'success', 'info', 'warning', 'danger'].includes(value)
   }
 })
+
+// 如果有 v-permission 指令，需要将其传递给内部的 el-button
+if (attrs['v-permission']) {
+  const permission = attrs['v-permission']
+  delete attrs['v-permission']
+}
 </script>
 
 <style lang="scss" scoped>

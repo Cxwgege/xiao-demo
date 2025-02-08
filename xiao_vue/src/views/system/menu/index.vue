@@ -4,10 +4,12 @@
     <el-card class="search-card">
       <el-form :inline="true" :model="queryParams" class="search-form" @submit.native.prevent>
         <el-form-item>
-          <x-button type="success" @click="handleAdd">
-          <el-icon>
-              <Plus/>
-            </el-icon>
+          <x-button 
+            v-permission="'system:menu:add'"
+            type="success" 
+            @click="handleAdd"
+          >
+            <el-icon><Plus/></el-icon>
             新增菜单
           </x-button>
         </el-form-item>
@@ -63,6 +65,7 @@
             <template #default="{ row }">
               <div class="operation-group">
                 <el-switch
+                    v-permission="'system:menu:status'"
                     v-model="row.status"
                     :active-value="1"
                     :inactive-value="0"
@@ -70,6 +73,7 @@
                     @change="handleStatusChange(row)"
                 />
                 <el-button
+                    v-permission="'system:menu:edit'"
                     link
                     type="primary"
                     @click="handleEdit(row)">
@@ -79,6 +83,7 @@
                   编辑
                 </el-button>
                 <el-button
+                    v-permission="'system:menu:delete'"
                     link
                     type="danger"
                     @click="handleDelete(row)">
@@ -279,15 +284,6 @@ onMounted(() => {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
-}
-
-/* 按钮hover效果 */
-:deep(.el-button--primary.is-link:hover) {
-  color: #00d2ff;
-}
-
-:deep(.el-button--danger.is-link:hover) {
-  color: #ff4d4f;
 }
 
 /* 修改表格操作列按钮样式 */

@@ -20,7 +20,7 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside :width="isCollapse ? '64px' : '220px'">
+        <el-aside :width="isCollapse ? '64px' : '180px'">
           <div class="menu-fold" @click="isCollapse = !isCollapse">
             <el-icon class="fold-icon">
               <component :is="isCollapse ? 'Expand' : 'Fold'" />
